@@ -1,0 +1,138 @@
+.content {
+  font-family: AuthenticSans, Arial, sans-serif;
+  color: red;
+  padding: 1rem 0 2rem;
+}
+
+.content .container {
+  padding: 0;
+}
+
+.content .container h4 {
+  padding: 1rem 1rem 0;
+}
+
+.content button {
+  border: 1px solid #000;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  margin: 0 1rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.data-tracking {
+  transition:
+    background-color 50ms linear,
+    transform 500ms linear;
+}
+
+.amplitude {
+  height: 1.25rem;
+  width: 1.25rem;
+  border-radius: 1.25rem;
+}
+
+.audio-player-container {
+  padding: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .audio-player-container.rounded {
+    padding: 1rem;
+  }
+}
+
+/* ExtendedInfo */
+.extended-info {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .extended-info {
+    width: 100%;
+  }
+}
+
+.extended-info .extended {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  width: 360px;
+  margin-left: 1rem;
+}
+
+@media (max-width: 768px) {
+  .extended-info .extended {
+    width: auto;
+    margin-left: 0;
+  }
+}
+
+.extended-info .extended .audio-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 300ms;
+  padding: 0.5rem 0.75rem;
+  margin: -0.5rem 0;
+  width: 100%;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.extended-info .extended .audio-data .container {
+  display: flex;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.extended-info .extended .audio-data .image {
+  min-height: 30px;
+  min-width: 30px;
+  background-size: cover;
+  background-position: center;
+}
+
+.extended-info .extended .audio-data .info {
+  font-size: 0.825rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.extended-info .extended .audio-data .info .artist {
+  color: #808080;
+  transition: color 300ms;
+}
+
+.extended-info .extended .audio-data .info .title {
+  color: #000;
+  transition: color 300ms;
+}
+
+.extended-info .extended .audio-data:hover .info .artist {
+  color: #000;
+}
+
+.extended-info .extended .audio-data .ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.extended-info .extended .button {
+  height: 1rem;
+  width: auto;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.extended-info .extended .buttons {
+  display: flex;
+  gap: 1rem;
+}

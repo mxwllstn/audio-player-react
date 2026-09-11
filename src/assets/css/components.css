@@ -1,0 +1,260 @@
+.audio-player-container {
+  display: flex;
+  flex-direction: column;
+  color: #000;
+}
+
+.audio-player-container .loading,
+.audio-player-container .error {
+  font-size: 1rem;
+  font-family: SpaceGrotesk, Arial, sans-serif;
+  line-height: 2.25rem;
+}
+
+.audio-player-container .audio-player {
+  font-family: SpaceGrotesk, Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  position: relative;
+  background: #f4f4f4;
+}
+
+@media (max-width: 768px) {
+  .audio-player-container .audio-player {
+    padding: 1.25rem 1rem 1rem 0.75rem;
+  }
+}
+
+.audio-player-container .audio-player .controls {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 1rem;
+}
+
+.audio-player-container .audio-player .button {
+  height: 1rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.audio-player-container .audio-player .controls .button {
+  height: 1rem;
+  width: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .audio-player-container .audio-player .controls {
+    flex: 0 1 auto;
+  }
+
+  .audio-player-container .audio-player .controls .previous,
+  .audio-player-container .audio-player .controls .next,
+  .audio-player-container .audio-player .controls .shuffle {
+    display: none;
+  }
+}
+
+.audio-player-container .audio-player .controls svg.button {
+  cursor: pointer;
+}
+
+.audio-player-container .audio-player .controls svg.button.next {
+  padding-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .audio-player-container .audio-player .controls .duration {
+    display: none;
+  }
+
+  .audio-player-container .audio-player .controls .current {
+    display: none;
+  }
+}
+
+.audio-player-container.rounded .audio-player {
+  border-radius: 0.25rem;
+}
+
+/* stream player — no background */
+.audio-player-container.stream .audio-player {
+  background: unset;
+  padding: 0.75rem 1rem;
+}
+
+/* PlayBar */
+.playbar-container {
+  width: 100%;
+  padding: 1rem 0;
+  cursor: pointer;
+}
+
+.playbar-container .playbar {
+  background: #808080;
+  height: 0.25rem;
+  position: relative;
+}
+
+.playbar-container .playbar .elapsed {
+  content: '';
+  background: #000;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.playbar-container .playbar .marker {
+  opacity: 0;
+  background: #000;
+  height: 1.5rem;
+  position: relative;
+  top: -10px;
+  left: 0;
+  width: 0.25rem;
+  transition: opacity 100ms;
+}
+
+.playbar-container:hover .marker,
+.playbar-container:active .marker {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .playbar-container {
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .playbar-container .playbar {
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+
+  .playbar-container .playbar .marker {
+    display: none;
+  }
+
+  .playbar-container .playbar .elapsed {
+    border-radius: 0.25rem 0 0;
+  }
+
+  .playbar-container .playbar .elapsed.complete {
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+}
+
+/* VolumeBar */
+.volumebar-container {
+  width: 100%;
+  margin: 0 1rem;
+  padding: 1rem 0;
+}
+
+.volumebar-container .volumebar {
+  background: #808080;
+  height: 0.25rem;
+  position: relative;
+}
+
+.volumebar-container .volumebar .elapsed {
+  content: '';
+  background: #000;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.volumebar-container .volumebar .marker {
+  background: #000;
+  height: 1.5rem;
+  position: relative;
+  top: -10px;
+  left: 0;
+  width: 0.25rem;
+}
+
+/* VolumeToggle */
+.volume {
+  display: block;
+  position: relative;
+  z-index: 999;
+}
+
+.volume .slider-container {
+  background: #efefef;
+  width: 30px;
+  height: 80px;
+  position: absolute;
+  top: -80px;
+  left: -5px;
+  border: 5px solid white;
+}
+
+.volume .slider-container .slider {
+  position: relative;
+  top: 22px;
+  left: -15px;
+  appearance: none;
+  width: 50px;
+  height: 3px;
+  background: #000;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  transform: rotate(270deg);
+  cursor: pointer;
+}
+
+.volume .slider-container .slider::-webkit-slider-thumb {
+  appearance: none;
+  border-radius: 10px;
+  width: 10px;
+  height: 10px;
+  background: #000;
+  cursor: pointer;
+}
+
+.volume .button {
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+}
+
+.audio-player-container .audio-player .controls .volume .button {
+  height: auto;
+  width: auto;
+}
+
+/* TimeDisplay */
+.time {
+  position: relative;
+  top: -1px;
+  font-family: SpaceMono, Arial, sans-serif;
+  font-size: 1rem;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .time {
+    top: 0;
+  }
+}
+
+/* PlayButton */
+.play-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1rem;
+  width: auto;
+}
