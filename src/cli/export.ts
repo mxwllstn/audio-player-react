@@ -31,12 +31,10 @@ async function downloadFile(url: string, outputDir: string, filename?: string) {
       }
       const destination = path.resolve(path.join(outputDir, filename))
       const fileStream = fs.createWriteStream(destination, { flags: 'w' })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await finished(Readable.fromWeb(res.body as any).pipe(fileStream))
+      await finished(Readable.fromWeb(res.body as Parameters<typeof Readable.fromWeb>[0]).pipe(fileStream))
       return destination
     }
-  }
-  catch (err) {
+  } catch (err) {
     console.log('Error ', err)
   }
 }
