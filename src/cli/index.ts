@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { runExport } from './export.js'
+import { runExport } from './export'
 
 const args = process.argv.slice(2)
 const job = args[0]

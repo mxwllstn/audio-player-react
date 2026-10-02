@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { VolumeButton } from './VolumeButton.js'
+import { VolumeButton } from './VolumeButton'
 
 interface VolumeToggleProps {
   initVolume?: number

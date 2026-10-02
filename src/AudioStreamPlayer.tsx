@@ -1,8 +1,8 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { AntennaIcon } from './components/AntennaIcon.js'
-import { PlayButton } from './components/PlayButton.js'
-import { VolumeBar } from './components/VolumeBar.js'
-import { VolumeToggle } from './components/VolumeToggle.js'
+import { AntennaIcon } from './components/AntennaIcon'
+import { PlayButton } from './components/PlayButton'
+import { VolumeBar } from './components/VolumeBar'
+import { VolumeToggle } from './components/VolumeToggle'
 import './assets/css/main.css'
 import './assets/css/components.css'
 

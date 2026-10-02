@@ -1,4 +1,4 @@
-export { AudioFilePlayer } from './AudioFilePlayer.js'
-export type { AudioFilePlayerHandle, AudioFilePlayerProps } from './AudioFilePlayer.js'
-export { AudioStreamPlayer } from './AudioStreamPlayer.js'
-export type { AudioStreamPlayerHandle, AudioStreamPlayerProps } from './AudioStreamPlayer.js'
+export { AudioFilePlayer } from './AudioFilePlayer'
+export type { AudioFilePlayerHandle, AudioFilePlayerProps } from './AudioFilePlayer'
+export { AudioStreamPlayer } from './AudioStreamPlayer'
+export type { AudioStreamPlayerHandle, AudioStreamPlayerProps } from './AudioStreamPlayer'

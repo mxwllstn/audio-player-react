@@ -1,5 +1,5 @@
-import type { Duration, DurationUnitType } from '../utils/dayjs.js'
-import dayjs from '../utils/dayjs.js'
+import type { Duration, DurationUnitType } from '../utils/dayjs'
+import dayjs from '../utils/dayjs'
 
 interface TimeDisplayProps {
   currentTime?: number
