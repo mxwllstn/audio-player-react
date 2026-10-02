@@ -13,4 +13,11 @@ if (!outputDirArg) {
   process.exit(1)
 }
 
-runExport(outputDirArg).then(() => process.exit(0)).catch(() => process.exit(1))
+runExport(outputDirArg)
+  .then(() => {
+    process.exit(0)
+  })
+  .catch((err) => {
+    console.error('Error:', err.message)
+    process.exit(1)
+  })
