@@ -21,7 +21,6 @@
   "module": "./dist/audio-player.mjs",
   "bin": "./cli.mjs",
   "files": [
-    "cli.mjs",
     "dist"
   ],
   "scripts": {
