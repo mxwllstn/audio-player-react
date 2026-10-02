@@ -24,7 +24,13 @@ export function TimeDisplay({ currentTime, duration, type = 'joint', className }
       {type === 'joint' && (
         <span>
           <span>{formatTime(currentTime ?? 0)}</span>
-          {showDuration && <span> / {formatTime(duration ?? 0)} </span>}
+          {showDuration && (
+            <span>
+              {' '}
+              /
+              {formatTime(duration ?? 0)}
+            </span>
+          )}
         </span>
       )}
       {type === 'current' && (

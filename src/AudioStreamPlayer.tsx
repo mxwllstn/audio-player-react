@@ -1,10 +1,10 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import './assets/css/main.css'
-import './assets/css/components.css'
 import { AntennaIcon } from './components/AntennaIcon.js'
 import { PlayButton } from './components/PlayButton.js'
 import { VolumeBar } from './components/VolumeBar.js'
 import { VolumeToggle } from './components/VolumeToggle.js'
+import './assets/css/main.css'
+import './assets/css/components.css'
 
 export interface AudioStreamPlayerProps {
   src?: string | null
@@ -19,8 +19,8 @@ export interface AudioStreamPlayerProps {
   title?: string
   children?: React.ReactNode
   onStreamEnded?: () => void
-  onSpectralData?: (data: { freq: Uint8Array; time: Uint8Array }, idx?: number) => void
-  onAmplitudeData?: (data: { avg: number; peak: number } | null, idx?: number) => void
+  onSpectralData?: (data: { freq: Uint8Array, time: Uint8Array }, idx?: number) => void
+  onAmplitudeData?: (data: { avg: number, peak: number } | null, idx?: number) => void
   onLoading?: () => void
   onLoaded?: () => void
   onError?: (error: string, idx?: number) => void
@@ -35,7 +35,7 @@ export interface AudioStreamPlayerHandle {
   status: string
 }
 
-export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStreamPlayerProps>(function AudioStreamPlayer(props, ref) {
+export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStreamPlayerProps>((props, ref) => {
   const {
     src,
     idx,
@@ -75,11 +75,21 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
   const isConnecting = !isLoading && canPlayThrough === false
 
   function getStatus(): string {
-    if (error) return error || 'error'
-    if (isConnecting) return 'connecting'
-    if (isLoading) return 'loading'
-    if (isPaused === undefined) return 'stopped'
-    if (!isPaused) return 'playing'
+    if (error) {
+      return error || 'error'
+    }
+    if (isConnecting) {
+      return 'connecting'
+    }
+    if (isLoading) {
+      return 'loading'
+    }
+    if (isPaused === undefined) {
+      return 'stopped'
+    }
+    if (!isPaused) {
+      return 'playing'
+    }
     return 'paused'
   }
 
@@ -89,7 +99,9 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
 
   function setLoadingState(state: boolean) {
     setStreamLoading(state)
-    if (!state) onLoaded?.()
+    if (!state) {
+      onLoaded?.()
+    }
   }
 
   function setVolumeValue(vol: number) {
@@ -107,7 +119,9 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
   }
 
   function getAmplitudeData() {
-    if (!analyserRef.current) return null
+    if (!analyserRef.current) {
+      return null
+    }
     analyserRef.current.fftSize = 2048 * 4
     const bufferLength = analyserRef.current.frequencyBinCount
     const dataArray = new Uint8Array(bufferLength)
@@ -121,7 +135,9 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
   }
 
   function getSpectralData() {
-    if (!analyserRef.current) return null
+    if (!analyserRef.current) {
+      return null
+    }
     analyserRef.current.fftSize = 2048
     const bufferLength = analyserRef.current.frequencyBinCount
     const freqByteData = new Uint8Array(bufferLength)
@@ -149,7 +165,9 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
       const id = window.setInterval(() => {
         if (getStatus() === 'playing') {
           const data = getSpectralData()
-          if (data) onSpectralData?.(data, idx)
+          if (data) {
+            onSpectralData?.(data, idx)
+          }
         }
       }, 100)
       trackingIntervalsRef.current.push(id)
@@ -157,7 +175,9 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
   }
 
   function initAudioContext() {
-    if (!audioPlayerEl.current) return
+    if (!audioPlayerEl.current) {
+      return
+    }
     audioContextRef.current = new AudioContext()
     sourceRef.current = audioContextRef.current.createMediaElementSource(audioPlayerEl.current)
     gainNodeRef.current = audioContextRef.current.createGain()
@@ -179,14 +199,18 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
   }
 
   function resetDataTracking() {
-    if (!dataTracking) return
+    if (!dataTracking) {
+      return
+    }
     if ((Array.isArray(dataTracking) ? dataTracking.includes('amplitude') : dataTracking === 'amplitude')) {
       onAmplitudeData?.(null, idx)
     }
   }
 
   function playAudio() {
-    if (!audioPlayerEl.current) return
+    if (!audioPlayerEl.current) {
+      return
+    }
     audioPlayerEl.current.src = src ?? ''
     audioPlayerEl.current.load()
     audioPlayerEl.current.play()
@@ -203,14 +227,20 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
   }
 
   async function toggleAudio() {
-    if (!audioContextRef.current) initAudioContext()
-    if (canPlayThrough === undefined) setCanPlayThrough(false)
+    if (!audioContextRef.current) {
+      initAudioContext()
+    }
+    if (canPlayThrough === undefined) {
+      setCanPlayThrough(false)
+    }
     if (isPlaying) {
       pauseAudio()
     } else {
       start()
     }
-    if (dataTracking) resetDataTracking()
+    if (dataTracking) {
+      resetDataTracking()
+    }
     setIsPaused(audioPlayerEl.current?.paused)
     onToggle?.()
   }
@@ -218,11 +248,13 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
   // masterVolume watch
   useEffect(() => {
     setGain(volume)
-  }, [masterVolume]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [masterVolume])
 
   useEffect(() => {
     const el = audioPlayerEl.current
-    if (!el) return
+    if (!el) {
+      return
+    }
 
     async function initStream() {
       try {
@@ -255,12 +287,16 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
         }
       } catch (e: unknown) {
         setLoadingState(false)
-        if (e instanceof Error) console.error(e.message)
+        if (e instanceof Error) {
+          console.error(e.message)
+        }
       }
     }
 
     function initAudioPlayer() {
-      if (!el) return
+      if (!el) {
+        return
+      }
       el.crossOrigin = 'anonymous'
       setGain(initVolume)
 
@@ -281,19 +317,23 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
 
     initStream().then(() => {
       initAudioPlayer()
-      if (volumeBar) setVolumeValue(50)
+      if (volumeBar) {
+        setVolumeValue(50)
+      }
     })
 
     return () => {
       trackingIntervalsRef.current.forEach(id => clearInterval(id))
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   useImperativeHandle(ref, () => ({
     play: playAudio,
     pause: pauseAudio,
     toggle: toggleAudio,
-    get status() { return getStatus() },
+    get status() {
+      return getStatus()
+    },
   }))
 
   return (
@@ -310,11 +350,13 @@ export const AudioStreamPlayer = forwardRef<AudioStreamPlayerHandle, AudioStream
       )}
       {!streamLoading && !error && src && (
         <div className="audio-player">
-          {isConnecting ? (
-            <AntennaIcon className="button" />
-          ) : (
-            <PlayButton isPlaying={isPlaying} className="button" onClick={toggleAudio} />
-          )}
+          {isConnecting
+            ? (
+                <AntennaIcon className="button" />
+              )
+            : (
+                <PlayButton isPlaying={isPlaying} className="button" onClick={toggleAudio} />
+              )}
           {volumeBar && <VolumeBar volume={volume} onSetGain={setGain} />}
           {!volumeBar && volumeButton && (
             <VolumeToggle

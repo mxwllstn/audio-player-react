@@ -1,6 +1,4 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import './assets/css/main.css'
-import './assets/css/components.css'
 import { LoadingSpinner } from './components/LoadingSpinner.js'
 import { NextButton } from './components/NextButton.js'
 import { PlayBar } from './components/PlayBar.js'
@@ -9,6 +7,8 @@ import { PreviousButton } from './components/PreviousButton.js'
 import { ShuffleButton } from './components/ShuffleButton.js'
 import { TimeDisplay } from './components/TimeDisplay.js'
 import { VolumeToggle } from './components/VolumeToggle.js'
+import './assets/css/main.css'
+import './assets/css/components.css'
 
 export interface AudioFilePlayerProps {
   src?: string
@@ -32,7 +32,7 @@ export interface AudioFilePlayerProps {
   onPrevious?: () => void
   onNext?: () => void
   onShuffleToggle?: (active: boolean) => void
-  onTimeUpdate?: (data: { time: number; duration: number }) => void
+  onTimeUpdate?: (data: { time: number, duration: number }) => void
   onSeekUpdate?: (time: number | null) => void
 }
 
@@ -45,7 +45,7 @@ export interface AudioFilePlayerHandle {
   isPlaying: boolean
 }
 
-export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayerProps>(function AudioFilePlayer(props, ref) {
+export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayerProps>((props, ref) => {
   const {
     src,
     initDuration = 0,
@@ -94,9 +94,15 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
   const initVolume = volume !== null ? Number(volume) : 100
 
   function getStatus(): string {
-    if (loading) return 'loading'
-    if (isPaused === undefined) return 'stopped'
-    if (!isPaused) return 'playing'
+    if (loading) {
+      return 'loading'
+    }
+    if (isPaused === undefined) {
+      return 'stopped'
+    }
+    if (!isPaused) {
+      return 'playing'
+    }
     return 'paused'
   }
 
@@ -121,7 +127,10 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
       if (audioPlayerEl.current) {
         const t = audioPlayerEl.current.currentTime
         setCurrentTime(t)
-        setDurationState(d => { emitTimeUpdate(t, d); return d })
+        setDurationState((d) => {
+          emitTimeUpdate(t, d)
+          return d
+        })
       }
     }, 25)
   }
@@ -185,7 +194,7 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
   }
 
   function toggleShuffle() {
-    setShuffleActive(prev => {
+    setShuffleActive((prev) => {
       const next = !prev
       onShuffleToggle?.(next)
       return next
@@ -195,12 +204,14 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
   // masterVolume changes
   useEffect(() => {
     setGain(volume)
-  }, [masterVolume]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [masterVolume])
 
   // Audio player init on mount
   useEffect(() => {
     const el = audioPlayerEl.current
-    if (!el) return
+    if (!el) {
+      return
+    }
 
     setDuration(initDuration)
     el.crossOrigin = 'anonymous'
@@ -215,7 +226,9 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
       const dur = el.duration
       setDuration(dur)
       emitTimeUpdate(0, dur)
-      if (playOnMount) play()
+      if (playOnMount) {
+        play()
+      }
       setLoading(false)
     }
 
@@ -223,7 +236,9 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
       stopTimeUpdate()
       setCurrentTimeState(duration)
       setIsPaused(el.paused)
-      if (resetOnEnd) setCurrentTime(0)
+      if (resetOnEnd) {
+        setCurrentTime(0)
+      }
     }
 
     if (!useAudioContextProp) {
@@ -231,7 +246,9 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
     } else {
       // initAudioContext async
       ;(async () => {
-        if (!src) return
+        if (!src) {
+          return
+        }
         const res = await fetch(src)
         const data = await res.arrayBuffer()
         audioContextRef.current = new AudioContext()
@@ -246,7 +263,9 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
 
     // Spacebar toggle
     function handleKeyup(e: KeyboardEvent) {
-      if (e.code === 'Space') toggleAudio()
+      if (e.code === 'Space') {
+        toggleAudio()
+      }
     }
     if (spacebarToggle) {
       window.addEventListener('keyup', handleKeyup)
@@ -254,14 +273,18 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
 
     return () => {
       stopTimeUpdate()
-      if (spacebarToggle) window.removeEventListener('keyup', handleKeyup)
+      if (spacebarToggle) {
+        window.removeEventListener('keyup', handleKeyup)
+      }
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   // Resize observers
   useEffect(() => {
     const containerEl = audioPlayerContainerRef.current
-    if (!containerEl) return
+    if (!containerEl) {
+      return
+    }
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         setAudioPlayerContainerWidth(entry.contentRect.width)
@@ -273,7 +296,9 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
 
   useEffect(() => {
     const playerEl = audioPlayerRef.current
-    if (!playerEl) return
+    if (!playerEl) {
+      return
+    }
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         setAudioPlayerWidth(entry.contentRect.width)
@@ -288,8 +313,12 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
     play,
     pause,
     toggle: toggleAudio,
-    get status() { return getStatus() },
-    get isPlaying() { return getStatus() === 'playing' },
+    get status() {
+      return getStatus()
+    },
+    get isPlaying() {
+      return getStatus() === 'playing'
+    },
   }))
 
   return (
@@ -304,11 +333,13 @@ export const AudioFilePlayer = forwardRef<AudioFilePlayerHandle, AudioFilePlayer
           {previousButton && (
             <PreviousButton className="button previous" onClick={onPrevious} />
           )}
-          {loading ? (
-            <LoadingSpinner className="button" />
-          ) : (
-            <PlayButton isPlaying={isPlaying} className="button" onClick={toggleAudio} />
-          )}
+          {loading
+            ? (
+                <LoadingSpinner className="button" />
+              )
+            : (
+                <PlayButton isPlaying={isPlaying} className="button" onClick={toggleAudio} />
+              )}
           {nextButton && (
             <NextButton className="button next" onClick={onNext} />
           )}

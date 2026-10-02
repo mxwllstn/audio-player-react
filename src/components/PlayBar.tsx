@@ -42,13 +42,17 @@ export function PlayBar({
   }, [dragInit, dragPosition, currentTime, duration])
 
   const audioPlayerOffset = useMemo(() => {
-    if (!fullWidth) return 1
+    if (!fullWidth) {
+      return 1
+    }
     const containerOffset = window.innerWidth - audioPlayerContainerWidth
     return ((audioPlayerContainerWidth - audioPlayerWidth + containerOffset - 32) / 2) + 2
   }, [fullWidth, audioPlayerContainerWidth, audioPlayerWidth])
 
   const drag = useCallback((event: MouseEvent | TouchEvent) => {
-    if (!playbarRef.current) return
+    if (!playbarRef.current) {
+      return
+    }
     const rect = playbarRef.current.getBoundingClientRect()
     const clientX = getClientX(event)
     const windowOffset = -audioPlayerOffset
@@ -58,7 +62,9 @@ export function PlayBar({
   }, [audioPlayerOffset, onSetSeekTime])
 
   const handleMouseup = useCallback((event: MouseEvent | TouchEvent) => {
-    if (!playbarRef.current) return
+    if (!playbarRef.current) {
+      return
+    }
     const rect = playbarRef.current.getBoundingClientRect()
     const clientX = getClientX(event)
     const windowOffset = -audioPlayerOffset
@@ -75,7 +81,9 @@ export function PlayBar({
   }, [audioPlayerOffset, drag, onSeek])
 
   const initDrag = useCallback((event: React.MouseEvent | React.TouchEvent) => {
-    if (!playbarRef.current) return
+    if (!playbarRef.current) {
+      return
+    }
 
     window.addEventListener('mousemove', drag)
     window.addEventListener('mouseup', handleMouseup as EventListener)
@@ -87,17 +95,21 @@ export function PlayBar({
     drag(event.nativeEvent)
   }, [drag, handleMouseup])
 
-  if (!showDuration) return null
+  if (!showDuration) {
+    return null
+  }
 
   return (
     <div className="playbar-container" onMouseDown={initDrag} onTouchStart={initDrag}>
       <div ref={playbarRef} className="playbar">
-        {duration ? (
-          <div
-            className={`elapsed${markerPosition >= 100 ? ' complete' : ''}`}
-            style={{ width: `${markerPosition}%` }}
-          />
-        ) : null}
+        {duration
+          ? (
+              <div
+                className={`elapsed${markerPosition >= 100 ? ' complete' : ''}`}
+                style={{ width: `${markerPosition}%` }}
+              />
+            )
+          : null}
         <div className="marker" style={{ left: `${markerPosition}%` }} />
       </div>
     </div>

@@ -1,13 +1,23 @@
+import type {
+  AudioFilePlayerHandle,
+  AudioStreamPlayerHandle,
+} from '@mxwllstn/audio-player-react'
+import {
+  AudioFilePlayer,
+  AudioStreamPlayer,
+} from '@mxwllstn/audio-player-react'
 import { useRef, useState } from 'react'
-import { AudioFilePlayer, AudioStreamPlayer } from '@mxwllstn/audio-player-react'
-import type { AudioFilePlayerHandle, AudioStreamPlayerHandle } from '@mxwllstn/audio-player-react'
 import { ExtendedInfo } from './components/ExtendedInfo'
 import './App.css'
 
 const audios = [
   {
     src: '/audio/1.mp3',
-    data: { artist: 'Max Stein', title: 'Parc Lafontaine 2023.08.09', image: '/image/1.jpg' },
+    data: {
+      artist: 'Max Stein',
+      title: 'Parc Lafontaine 2023.08.09',
+      image: '/image/1.jpg',
+    },
   },
   {
     src: '/audio/2.mp3',
@@ -18,21 +28,41 @@ const audios = [
     data: { artist: 'Max Stein', title: 'Parc Jarry 2022.05.12' },
   },
   { src: 'https://stream.radiovestige.com/AcousticMirror', stream: true },
-  { src: 'https://stream.sonicscape.land/audiohijack4', stream: true, volumeBar: true, title: 'Test title' },
-  { src: 'https://stream.sonicscape.land/audiohijack4', stream: true, dataTracking: 'amplitude' },
-  { src: 'https://stream.sonicscape.land/audiohijack4', stream: true, hidden: true },
+  {
+    src: 'https://stream.sonicscape.land/audiohijack4',
+    stream: true,
+    volumeBar: true,
+    title: 'Test title',
+  },
+  {
+    src: 'https://stream.sonicscape.land/audiohijack4',
+    stream: true,
+    dataTracking: 'amplitude',
+  },
+  {
+    src: 'https://stream.sonicscape.land/audiohijack4',
+    stream: true,
+    hidden: true,
+  },
 ] as {
   src: string
   stream?: boolean
   hidden?: boolean
-  data?: { artist: string; title: string; image?: string }
+  data?: { artist: string, title: string, image?: string }
   dataTracking?: string
   volumeBar?: boolean
   title?: string
 }[]
 
-const mapNumRange = (num: number, inMin: number, inMax: number, outMin: number, outMax: number) =>
-  ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+function mapNumRange(
+  num: number,
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number,
+) {
+  return ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+}
 
 export default function App() {
   const audioPlayerRef = useRef<AudioFilePlayerHandle>(null)
@@ -67,7 +97,7 @@ export default function App() {
     filePlayerRefs.current[idx]?.seek(pos)
   }
 
-  function onAmplitudeData(data: { avg: number; peak: number } | null) {
+  function onAmplitudeData(data: { avg: number, peak: number } | null) {
     const { avg } = data || {}
     const val = avg ? mapNumRange(avg, -50, 0, 0, 100) : 0
     setDbOpacity(val)
@@ -82,7 +112,10 @@ export default function App() {
             return (
               <div key={idx}>
                 <AudioStreamPlayer
-                  ref={el => { streamPlayerRefs.current[idx] = el as AudioStreamPlayerHandle | null }}
+                  ref={(el) => {
+                    streamPlayerRefs.current[idx]
+                      = el as AudioStreamPlayerHandle | null
+                  }}
                   src={audio.src}
                   idx={idx}
                   volumeBar={audio.volumeBar}
@@ -102,16 +135,17 @@ export default function App() {
                     />
                   )}
                 </AudioStreamPlayer>
-                <button onClick={() => toggleAudio(idx)}>
-                  toggle
-                </button>
+                <button onClick={() => toggleAudio(idx)}>toggle</button>
               </div>
             )
           } else {
             return (
               <div key={idx}>
                 <AudioFilePlayer
-                  ref={el => { filePlayerRefs.current[idx] = el as AudioFilePlayerHandle | null }}
+                  ref={(el) => {
+                    filePlayerRefs.current[idx]
+                      = el as AudioFilePlayerHandle | null
+                  }}
                   src={audio.src}
                   idx={idx}
                   hidden={audio.hidden}
@@ -150,9 +184,7 @@ export default function App() {
             onExtendedClick={() => setShowExtended(v => !v)}
           />
         </AudioFilePlayer>
-        <button onClick={() => toggleAudio()}>
-          toggle
-        </button>
+        <button onClick={() => toggleAudio()}>toggle</button>
         <button onClick={() => changeTrack(0)}>track 1</button>
         <button onClick={() => changeTrack(1)}>track 2</button>
         <button onClick={() => changeTrack(2)}>track 3</button>
@@ -160,8 +192,14 @@ export default function App() {
 
       <div className="container">
         <h4>hidden audio example</h4>
-        <AudioFilePlayer ref={audioPlayerHiddenRef} hidden src={audios[0]?.src} />
-        <button onClick={() => audioPlayerHiddenRef.current?.toggle()}>toggle hidden</button>
+        <AudioFilePlayer
+          ref={audioPlayerHiddenRef}
+          hidden
+          src={audios[0]?.src}
+        />
+        <button onClick={() => audioPlayerHiddenRef.current?.toggle()}>
+          toggle hidden
+        </button>
       </div>
     </div>
   )

@@ -21,30 +21,39 @@
   "module": "./dist/audio-player.mjs",
   "bin": "./cli.mjs",
   "files": [
+    "cli.mjs",
     "dist"
   ],
   "scripts": {
     "dev": "pnpm --filter audio-player-react-example dev",
-    "build": "tsc --noEmit && vite build && unbuild && pnpm run compile",
+    "build": "pnpm run typecheck && vite build && unbuild && pnpm run compile",
+    "prepublish": "pnpm run lint && pnpm run build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "release": "bumpp && pnpm publish",
     "typecheck": "tsc --noEmit",
-    "compile": "tsx ./src/cli/compile.ts"
-  },
-  "dependencies": {
-    "adm-zip": "^0.5.16",
-    "dayjs": "^1.11.18"
+    "compile": "tsx ./src/cli/compile.ts",
+    "cli": "tsx ./src/cli.ts"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "dayjs": "^1.11.18"
+  },
   "devDependencies": {
+    "@antfu/eslint-config": "^5.4.1",
     "@types/adm-zip": "^0.5.7",
     "@types/node": "^24.5.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "typescript": "^5.5.3",
+    "bumpp": "^10.2.3",
+    "eslint": "^9.36.0",
     "tsx": "^4.20.5",
+    "typescript": "^5.5.3",
     "unbuild": "^3.6.1",
     "vite": "^5.4.1",
     "vite-plugin-css-injected-by-js": "^3.5.2",
