@@ -27,7 +27,7 @@ async function downloadFile(url: string, outputDir: string, filename?: string) {
     if (res.body) {
       filename = filename || url.split('/').pop() || ''
       if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir)
+        fs.mkdirSync(outputDir, { recursive: true })
       }
       const destination = path.resolve(path.join(outputDir, filename))
       const fileStream = fs.createWriteStream(destination, { flags: 'w' })
